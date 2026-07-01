@@ -1297,7 +1297,7 @@ class Window(QMainWindow):
                 if py_files:
                     best_match = None
                     for py in py_files:
-                        if py.lower() == f"{f.lower()}.py" or py.lower() == f"{f}.py":
+                        if py.lower() == f"{f.lower()}.py" or py == f"{f}.py":
                             best_match = py
                             break
                     if not best_match:
