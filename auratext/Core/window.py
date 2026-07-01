@@ -1300,8 +1300,12 @@ class Window(QMainWindow):
                         if py.lower() == f"{f.lower()}.py" or py == f"{f}.py":
                             best_match = py
                             break
+                        elif py == "main.py" or py == "__main__.py":
+                            best_match = py
+                            break
                     if not best_match:
-                        best_match = py_files[0]
+                        print(f"WARNING: File for plugin {f} not found, skipping")
+                        continue
                     
                     py_file_path = os.path.join(path, best_match)
                     plugin_name = best_match[:-3]
