@@ -1311,6 +1311,9 @@ class Window(QMainWindow):
                     py_file_path = os.path.join(path, best_match)
                     plugin_name = best_match[:-3]
                     self._load_plugin_module(plugin_name, py_file_path, path)
+            else:
+                print(f"WARNING: Ignoring {f} plugin with fake/false/invalid format!")
+                continue
 
         dlg.close()
 
