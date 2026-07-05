@@ -145,6 +145,7 @@ class CodeEditor(QsciScintilla):
         self.setBraceMatching(QsciScintilla.BraceMatch.StrictBraceMatch)
         self.setCaretLineVisible(True)
         self.setCaretLineBackgroundColor(QColor("#20d3d3d3"))
+        self.SendScintilla(QsciScintilla.SCI_SETCARETFORE, QColor("#ffffff"))
         self.setWrapMode(QsciScintilla.WrapMode.WrapNone)
         self.setAutoCompletionThreshold(1)
         self.setBackspaceUnindents(True)
