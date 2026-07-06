@@ -3361,7 +3361,7 @@ class Window(QMainWindow):
 
     def version(self):
         try:
-            if not self.about_dialog:
+            if not isinstance(self.about_dialog, About.AboutAppDialog):
                 self.about_dialog = About.AboutAppDialog()
             self.about_dialog.exec()
             self.about_dialog.raise_()
