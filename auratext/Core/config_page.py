@@ -544,7 +544,8 @@ class ConfigPage(QWidget):
         if not hasattr(self, "materialconfig_label"):
             self.materialconfig_label = QLabel("Material Theme Type")
             self.materialconfig_combobox = QComboBox()
-            theme_opt = ['dark_amber',
+            theme_opt = ['dark_default',
+                         'dark_amber',
                          'dark_blue',
                          'dark_cyan',
                          'dark_lightgreen',
