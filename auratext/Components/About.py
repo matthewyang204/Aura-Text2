@@ -28,7 +28,10 @@ class AboutAppDialog(QDialog):
 
         # Image at the top
         image_label = QLabel()
-        pixmap = QPixmap(f"{local_app_data}/icons/banner.png")
+        pixmap = QPixmap() # f"{local_app_data}/icons/banner.png"
+        if not pixmap.load(os.path.join(local_app_data, "icons", "banner.png")):
+            pixmap = QPixmap(200, 200)
+            pixmap.fill(Qt.GlobalColor.transparent)
         pixmap = pixmap.scaled(200, 200, aspectRatioMode=Qt.AspectRatioMode.KeepAspectRatioByExpanding)
         image_label.setPixmap(pixmap)
         image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)

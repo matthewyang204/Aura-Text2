@@ -316,7 +316,7 @@ class Window(QMainWindow):
 
         os.makedirs(self.plugin_dep_dir, exist_ok=True)
 
-        self.version = "v5.5.0"
+        self.versionNumber = "v5.5.0"
 
         # project manager db init
         self.conn = sqlite3.connect(f"{self.local_app_data}/data/ProjectManager.db")
@@ -3362,7 +3362,6 @@ class Window(QMainWindow):
     def version(self):
         try:
             if not self.about_dialog:
-                from ..Components import About
                 self.about_dialog = About.AboutAppDialog()
             self.about_dialog.exec()
             self.about_dialog.raise_()
