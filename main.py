@@ -113,6 +113,26 @@ def main():
         from qt_material import apply_stylesheet
         theme = _theme["material_type"] + ".xml"
         apply_stylesheet(app, theme=theme)
+        app.setStyleSheet(
+            app.styleSheet()
+            + """
+        QDockWidget {
+            border: none;
+        }
+
+        QMainWindow::separator:vertical {
+            width: 0px;
+            image: none;
+            background: transparent;
+        }
+
+        QMainWindow::separator:horizontal {
+            height: 0px;
+            image: none;
+            background: transparent;
+        }
+        """
+        )
     ex = Window()
     pathArgsHandler(ex, sys.argv[1:])
     sys.exit(app.exec())
