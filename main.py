@@ -1,3 +1,23 @@
+import sys
+
+# Reconfigure stdout/stderr to avoid UnicodeEncodeError on Windows terminals when printing emojis (e.g. from qfluentwidgets)
+if sys.stdout is not None:
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        try:
+            sys.stdout.reconfigure(errors='replace')
+        except Exception:
+            pass
+if sys.stderr is not None:
+    try:
+        sys.stderr.reconfigure(encoding='utf-8')
+    except Exception:
+        try:
+            sys.stderr.reconfigure(errors='replace')
+        except Exception:
+            pass
+
 import json
 import os
 import shutil
@@ -142,3 +162,6 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print("Aura Text interrupted by user.")
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
