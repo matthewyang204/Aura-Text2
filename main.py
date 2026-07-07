@@ -1,4 +1,10 @@
 import sys
+import json
+import os
+import shutil
+import platform
+from auratext.Misc.quirks import copy_if_not_exists
+from auratext.Misc.boilerplates import get_appdata_dirs
 
 # Reconfigure stdout/stderr to avoid UnicodeEncodeError on Windows terminals when printing emojis (e.g. from qfluentwidgets)
 if sys.stdout is not None:
@@ -17,13 +23,6 @@ if sys.stderr is not None:
             sys.stderr.reconfigure(errors='replace')
         except Exception:
             pass
-
-import json
-import os
-import shutil
-import platform
-from auratext.Misc.quirks import copy_if_not_exists
-from auratext.Misc.boilerplates import get_appdata_dirs
 
 # v5.5.0
 
