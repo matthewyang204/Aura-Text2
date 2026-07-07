@@ -36,6 +36,10 @@ class CommandPaletteItemWidget(QWidget):
                 }
             """)
             layout.addWidget(self.shortcut_label)
+    
+    def sizeHint(self):
+        hint = super().sizeHint()
+        return QSize(hint.width(), max(hint.height(), 38))
 
 class CommandPalette(QDialog):
     def __init__(self, commands, parent=None):
