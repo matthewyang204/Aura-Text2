@@ -341,6 +341,11 @@ class Window(QMainWindow):
                 clean_val = val.strip()
                 if re.match(r'^[0-9a-fA-F]+$', clean_val):
                     self._themes[key] = f"#{clean_val}"
+        if "light" in self._themes["material_type"]:
+            for key, val in self._themes.items():
+                if isinstance(val, str) and val.startswith("#"):
+                    self._themes[key] = self.invert_hex_color(val)
+        print(f"VERBOSE: Theme settings: {self._themes}")
 
         # config file
         with open(f"{local_app_data}/data/config.json", "r") as config_file:
@@ -3499,3 +3504,12 @@ class Window(QMainWindow):
     def registerLSPDictEntry(self, name, data):
         # Add an entry per language to the global dictionary
         self.GlobalLSPDict[name] = data
+
+    def invert_hex_color(self, hex_color):
+        hex_color = hex_color.lstrip("#")
+
+        r = int(hex_color[0:2], 16)
+        g = int(hex_color[2:4], 16)
+        b = int(hex_color[4:6], 16)
+
+        return "#{:02X}{:02X}{:02X}".format(255 - r, 255 - g, 255 - b)
