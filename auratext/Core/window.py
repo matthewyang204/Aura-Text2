@@ -342,6 +342,7 @@ class Window(QMainWindow):
                 if re.match(r'^[0-9a-fA-F]+$', clean_val):
                     self._themes[key] = f"#{clean_val}"
         if "light" in self._themes["material_type"]:
+            self._themes["theme_type"] = "light"
             for key, val in self._themes.items():
                 if isinstance(val, str) and val.startswith("#"):
                     self._themes[key] = self.invert_hex_color(val)
