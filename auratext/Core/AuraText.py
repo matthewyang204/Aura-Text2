@@ -91,6 +91,7 @@ class CodeEditor(QsciScintilla):
         self._themes = window._themes
         lexer = Lexers.PythonLexer(window)
         self.setLexer(lexer)
+        self.lexerObject = lexer
         self.setPaper(QColor(window._themes["editor_theme"]))
         self.autocomplete_engine = PythonAutocompleteEngine(self)
         self.autocomplete_engine.refresh()

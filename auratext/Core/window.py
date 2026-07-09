@@ -1223,9 +1223,12 @@ class Window(QMainWindow):
         minimap.setVisible(self.minimap_visible)
         
         main_layout.addWidget(editor_area)
-        
+
         if self.text_editor.linter is not None:
             self.linters[id(self.text_editor)] = self.text_editor.linter
+
+        if self._themes.get("theme_type") == "light":
+            self.invert_editor_colors(self.text_editor)
         
         return container
 
@@ -3514,3 +3517,15 @@ class Window(QMainWindow):
         b = int(hex_color[4:6], 16)
 
         return "#{:02X}{:02X}{:02X}".format(255 - r, 255 - g, 255 - b)
+
+    def invert_editor_colors(self, editor):
+        print(f"VERBOSE: Inverting colors for editor {editor}")
+        lexer = editor.lexerObject
+
+        for style in range(256):
+            color = lexer.color(style)
+            if color.isValid():
+                lexer.setColor(
+                    QColor(self.invert_hex_color(color.name())),
+                    style
+                )
