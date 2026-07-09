@@ -316,7 +316,6 @@ class ConfigPage(QWidget):
             self.brcktclose.setChecked(False)
 
         self.cmdpaletteglass = QCheckBox("Glassmorphism in Command Palette")
-        editor_behaviour_layout.addWidget(self.cmdpaletteglass)
         self.settings_list.append(("Glassmorphism in Command Palette", [self.cmdpaletteglass]))
 
         if self._window._config.get("cmdpaletteglass", "true").lower() == "true":
@@ -369,6 +368,8 @@ class ConfigPage(QWidget):
         self.ttips_checkbox.setChecked(config.get("terminal_tips", "True") == "True")
         self.behaviour_layout.addWidget(self.ttips_checkbox)
         self.settings_list.append(("Show Tips in Terminal", [self.ttips_checkbox]))
+
+        self.behaviour_layout.addWidget(self.cmdpaletteglass)
 
         self.expopen_checkbox = QCheckBox("Show Explorer on Startup")
         self.expopen_checkbox.setChecked(config.get("explorer_default_open", "True") == "True")
