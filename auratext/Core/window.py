@@ -3057,6 +3057,10 @@ class Window(QMainWindow):
         self.auto_detect_language(file_path if file_path else title)
         self.update_language_display()
         self.update_run_button_visibility()
+
+        if self._themes.get("theme_type") == "light":
+            self.invert_editor_colors(self.current_editor)
+
         # Update status bar to show initial stats
         self.updateStatusBar()
 
@@ -3070,6 +3074,9 @@ class Window(QMainWindow):
         if ".html" in title:
             self.html_temp()
         self.tab_widget.setCurrentWidget(container)
+
+        if self._themes.get("theme_type") == "light":
+            self.invert_editor_colors(self.current_editor)
 
     def boilerplates(self):
         self.boilerplate_dialog = boilerplates.BoilerPlate(current_editor=self.current_editor)
@@ -3110,6 +3117,9 @@ class Window(QMainWindow):
             self.tab_widget.setCurrentWidget(container)
             # Update language display
             self.update_language_display()
+
+            if self._themes.get("theme_type") == "light":
+                self.invert_editor_colors(self.current_editor)
         else:
             pass
 
@@ -3284,6 +3294,10 @@ class Window(QMainWindow):
             self.tab_file_paths[tab_index] = cfile
             self.tab_widget.setCurrentWidget(container)
             self.update_run_button_visibility()
+
+            if self._themes.get("theme_type") == "light":
+                self.invert_editor_colors(self.current_editor)
+
             self.updateStatusBar()
         except FileNotFoundError and OSError:
             pass
@@ -3521,7 +3535,18 @@ class Window(QMainWindow):
     def invert_editor_colors(self, editor):
         print(f"VERBOSE: Inverting colors for editor {editor}")
         lexer = editor.lexerObject
+        if self._themes["theme_type"] == "light":
+            lexer.setDefaultColor(QColor("#000000"))
 
+        # Background / foreground
+        fg = editor.color()
+        editor.setColor(QColor(
+            255 - fg.red(),
+            255 - fg.green(),
+            255 - fg.blue()
+        ))
+
+        # Lexers
         for style in range(256):
             color = lexer.color(style)
             if color.isValid():
