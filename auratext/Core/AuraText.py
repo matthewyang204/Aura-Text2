@@ -98,11 +98,20 @@ class CodeEditor(QsciScintilla):
         # trigger save indicator
         self.modificationChanged.connect(self.saveIndicTrigger)
 
+        active_window = self.window()
+        config = getattr(active_window, "_config", {})
+        wrdwrap = True if config.get("word_wrap", "false").lower() == "true" else False
+
         # Autocompletion
         self.setAutoCompletionSource(QsciScintilla.AutoCompletionSource.AcsAPIs)
         self.setAutoCompletionThreshold(1)
         self.setAutoCompletionCaseSensitivity(True)
-        self.setWrapMode(QsciScintilla.WrapMode.WrapNone)
+
+        if wrdwrap:
+            self.setWrapMode(QsciScintilla.WrapMode.WrapWord)
+        else:
+            self.setWrapMode(QsciScintilla.WrapMode.WrapNone)
+            
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.setAutoCompletionThreshold(1)
