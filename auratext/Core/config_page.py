@@ -580,6 +580,7 @@ class ConfigPage(QWidget):
 
         self.materialconfig_label.show()
         self.materialconfig_combobox.show()
+        self.materialconfigIsBeta_label.show()
         self.materialconfig_combobox.setCurrentText(self._window._themes["material_type"])
 
     def theming_shift(self):
@@ -589,6 +590,7 @@ class ConfigPage(QWidget):
             if hasattr(self, "materialconfig_label"):
                 self.materialconfig_label.hide()
                 self.materialconfig_combobox.hide()
+                self.materialconfigIsBeta_label.hide()
 
     # @staticmethod
     if platform.system() == "Windows":
