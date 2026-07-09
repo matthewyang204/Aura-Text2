@@ -550,6 +550,7 @@ class ConfigPage(QWidget):
         if not hasattr(self, "materialconfig_label"):
             self.materialconfig_label = QLabel("Material Theme Type")
             self.materialconfigIsBeta_label = QLabel("Please note that the light* materials are in beta and may not work correctly.")
+            self.materialconfigIsBeta_label.setStyleSheet("color: red;")
             self.materialconfig_combobox = QComboBox()
             theme_opt = ['dark_default',
                          'dark_amber',
