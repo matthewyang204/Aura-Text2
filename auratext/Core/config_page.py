@@ -310,6 +310,11 @@ class ConfigPage(QWidget):
         editor_behaviour_layout.addWidget(self.brcktclose)
         self.settings_list.append(("Intelligent Auto-Close Brackets & Quotes", [self.brcktclose]))
 
+        self.wrdwrap = QCheckBox("Word Wrap")
+        self.wrdwrap.setChecked(config.get("word_wrap", "False") == "True")
+        self.behaviour_layout.addWidget(self.wrdwrap)
+        self.settings_list.append(("Word Wrap", [self.wrdwrap]))
+
         if self._window._config.get("brckt_close", "true").lower() == "true":
             self.brcktclose.setChecked(True)
         else:
