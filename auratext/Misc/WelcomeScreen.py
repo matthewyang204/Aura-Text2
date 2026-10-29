@@ -309,7 +309,7 @@ class WelcomeWidget(QWidget):
                 for name, path in projects:
                     project_item = RecentProjectItem(name, path, theme_color)
                     project_item.clicked.connect(lambda checked, p=path: self.open_recent_project(p))
-                    delete_button = QPushButton("🗑️")
+                    delete_button = QPushButton("❌")
                     delete_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
                     delete_button.setFixedSize(32, 32)
                     delete_button.setToolTip("Remove from recent projects")
