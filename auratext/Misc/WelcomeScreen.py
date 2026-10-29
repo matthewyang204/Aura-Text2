@@ -5,7 +5,7 @@ import webbrowser
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QPixmap, QCursor
-from PyQt6.QtWidgets import (QPushButton, QWidget, QVBoxLayout, QLabel, 
+from PyQt6.QtWidgets import (QPushButton, QSizePolicy, QWidget, QVBoxLayout, QLabel, 
                              QHBoxLayout, QScrollArea, QFrame)
 
 from auratext.Misc.boilerplates import get_font_for_platform
@@ -130,6 +130,8 @@ class RecentProjectItem(QPushButton):
         super().__init__(parent)
         self.project_path = path
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        self.setToolTip(path)
         
         self.setText(f"{name}     {path}")
         self.setStyleSheet(f"""
@@ -145,6 +147,8 @@ class RecentProjectItem(QPushButton):
                 text-decoration: underline;
             }}
         """)
+
+        self.attributes = [name, path]
 
 
 class WelcomeWidget(QWidget):
@@ -294,6 +298,7 @@ class WelcomeWidget(QWidget):
         # Get recent projects from database
         recent_layout = QVBoxLayout()
         recent_layout.setSpacing(5)
+        self.recent_layout = recent_layout
         
         try:
             cursor = window.dbcursor
@@ -304,7 +309,29 @@ class WelcomeWidget(QWidget):
                 for name, path in projects:
                     project_item = RecentProjectItem(name, path, theme_color)
                     project_item.clicked.connect(lambda checked, p=path: self.open_recent_project(p))
-                    recent_layout.addWidget(project_item)
+                    delete_button = QPushButton("🗑️")
+                    delete_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+                    delete_button.setFixedSize(32, 32)
+                    delete_button.setToolTip("Remove from recent projects")
+                    row_widget = QWidget()
+                    project_item_layout = QHBoxLayout(row_widget)
+                    project_item_layout.setContentsMargins(0, 0, 0, 0)
+                    project_item_layout.setSpacing(1)
+                    project_item_layout.addWidget(
+                        project_item,
+                        0,
+                        Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter
+                    )
+                    project_item_layout.addWidget(
+                        delete_button,
+                        0,
+                        Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter
+                    )
+                    recent_layout.addWidget(row_widget)
+                    delete_button.clicked.connect(
+                        lambda checked=False, n=name, p=path, row=row_widget:
+                            self.remove_recent_project(n, p, row)
+                    )
             else:
                 no_recent = QLabel("No recent projects")
                 no_recent.setStyleSheet("color: #888888; font-size: 13px; padding: 6px 0px;")
@@ -355,3 +382,24 @@ class WelcomeWidget(QWidget):
             if self.window.tab_widget.tabText(i) == "Welcome":
                 self.window.tab_widget.removeTab(i)
                 break
+
+    def remove_recent_project(self, name, path, row_widget):
+        """Remove a project from the recent list without deleting its files."""
+        try:
+            self.window.dbcursor.execute(
+                'DELETE FROM projects WHERE name = ? AND path = ?',
+                (name, path)
+            )
+            self.window.conn.commit()
+        except Exception as e:
+            print(f"Error removing recent project: {e}")
+            return
+
+        self.recent_layout.removeWidget(row_widget)
+        row_widget.deleteLater()
+
+        self.window.dbcursor.execute('SELECT 1 FROM projects LIMIT 1')
+        if self.window.dbcursor.fetchone() is None:
+            no_recent = QLabel("No recent projects")
+            no_recent.setStyleSheet("color: #888888; font-size: 13px; padding: 6px 0px;")
+            self.recent_layout.insertWidget(self.recent_layout.count() - 1, no_recent)
